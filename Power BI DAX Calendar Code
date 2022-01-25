@@ -1,0 +1,23 @@
+Calendar = 
+  GENERATE (
+    CALENDAR( DATE(YEAR( TODAY()) - 2, MONTH( TODAY() ), DAY( TODAY()) ), TODAY()),
+    VAR startOfWeek = 1 // Where 1 = Sunday and 7 = Saturday, thus a 4 would be Wednesday
+    VAR to_day = [Date]
+    VAR days = DAY( to_day )
+    VAR months = MONTH ( to_day )
+    VAR years = YEAR ( to_day )
+    VAR nowYear = YEAR( TODAY() )
+    VAR nowMonth = MONTH( TODAY() )
+    VAR dayIndex = DATEDIFF( to_day, TODAY(), DAY) * -1
+    VAR todayNum = WEEKDAY( TODAY() )
+    VAR weekIndex = INT( ROUNDDOWN( ( dayIndex + -1 * IF( todayNum + startOfWeek <= 6, todayNum + startOfWeek, todayNum + startOfWeek - 7 )) / 7, 0 ) )
+  RETURN ROW (
+    "day", days,
+    "month", months,
+    "year", years,
+    "day index", dayIndex,
+    "week index", weekIndex,
+    "month index", INT( (years - nowYear ) * 12 + months - nowMonth ),
+    "year index", INT( years - nowYear )
+  )
+)
